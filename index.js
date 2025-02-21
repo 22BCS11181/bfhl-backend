@@ -1,13 +1,18 @@
 const express = require('express');
+const cors = require('cors');
+
 const app = express();
 app.use(express.json());
+app.use(cors());
 
 const PORT = process.env.PORT || 3000;
 
+// GET Endpoint (Test if API is working)
 app.get('/bfhl', (req, res) => {
     res.status(200).json({ "operation_code": 1 });
 });
 
+// POST Endpoint (Process Data)
 app.post('/bfhl', (req, res) => {
     const { data } = req.body;
     if (!Array.isArray(data)) return res.status(400).json({ "is_success": false });
@@ -27,4 +32,10 @@ app.post('/bfhl', (req, res) => {
     });
 });
 
+// Default route to prevent "Cannot GET /" error
+app.get('/', (req, res) => {
+    res.send('Backend is running! Use /bfhl for API requests.');
+});
+
+// Start server
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
